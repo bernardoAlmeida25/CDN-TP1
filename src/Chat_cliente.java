@@ -148,7 +148,7 @@ public class Chat_cliente implements Server_to_cliente {
                 case Mensagem.ATUALIZA_USERS_LOGIN:
                     menu_utilizador.L_utilizadores.add(mensagem.getUser_login());
                     break;
-                    
+
                 case Mensagem.ATUALIZA_GRUPOS:
                     /* atualiza tabela com os grupos criados */
                     boolean exists = false;
@@ -162,7 +162,7 @@ public class Chat_cliente implements Server_to_cliente {
                         menu_utilizador.L_grupos.add(mensagem.getUser_login());
                     }
                     break;
-                    
+
                 case Mensagem.GRUPO:
                     if (mensagem.isBool()) {
                         System.err.println("grupo com Sucesso!");
@@ -171,7 +171,7 @@ public class Chat_cliente implements Server_to_cliente {
                         System.err.println("Registo falhou!");
                     }
                     break;
-                    
+
                 case Mensagem.MENSAGEM_CHAT_PRIVATE:
                     /* gere forma de mostrar mensagens */
                     String gere_msm;
@@ -181,7 +181,10 @@ public class Chat_cliente implements Server_to_cliente {
                             gere_msm = "[" + mensagem.getRecebeu() + " > Me] : " + mensagem.getConteudo_msm() + "\n";
 
                             menu_utilizador.TA_Mensagem.append(gere_msm);
+                        } else if (mensagem.getEnviou().equals(nome_cliente)) {
+                            gere_msm = "[" + mensagem.getEnviou()+ " >" +  mensagem.getRecebeu() + " ] :" + mensagem.getConteudo_msm() + "\n";
                         } else {
+
                             gere_msm = "[" + mensagem.getRecebeu() + " > Me] : " + mensagem.getConteudo_msm() + "\n";
 
                         }
@@ -193,7 +196,7 @@ public class Chat_cliente implements Server_to_cliente {
 //                    mensagens.add(new Mensagens(msg.getEnviou(), msg.getRecebeu(), msm_padeiro));
 //                    ficheiros.Guarda_Objeto_Ficheiro(mensagens, nome_ficheiro);
                     break;
-                    
+
                 case Mensagem.GRUPO_MSM:
                     try {
                         if (menu_utilizador.L_grupos.getSelectedItem().equals(mensagem.getRecebeu())) {
@@ -203,15 +206,24 @@ public class Chat_cliente implements Server_to_cliente {
                         System.err.println(e);
                     }
                     break;
-                    
+
                 case Mensagem.SAIR:
                     menu_utilizador.L_utilizadores.remove(mensagem.getUser_login());
-                    menu_utilizador.TA_Mensagem.append("--> " + mensagem.getUser_login()+" saiu do Chat\n");
+                    menu_utilizador.TA_Mensagem.append("--> " + mensagem.getUser_login() + " saiu do Chat\n");
                     break;
-                   
+
                 case Mensagem.ATUALIZA_GRUPOS_REMOVIDO:
                     menu_utilizador.L_grupos.remove(mensagem.getUser_login());
-                    menu_utilizador.TA_Mensagem.append("--> " + mensagem.getUser_login()+" Grupo foi removido\n");
+                    menu_utilizador.TA_Mensagem.append("--> " + mensagem.getUser_login() + " Grupo foi removido\n");
+                    break;
+                case Mensagem.ATUALIZA_USER_EXIT_GROUP:
+                    try {
+                        if (menu_utilizador.L_grupos.getSelectedItem().equals(mensagem.getRecebeu())) {
+                            menu_utilizador.TA_Mensagem.append("Saiu do Grupo" + "\n");
+                        }
+                    } catch (Exception e) {
+                        System.err.println(e);
+                    }
                     break;
 
                 default:

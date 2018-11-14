@@ -92,6 +92,7 @@ public class ServerImpl implements Remote, Cliente_to_server {
     public synchronized void comunica_com_server(Mensagem mensagem) throws RemoteException {
         int tipo_msm = mensagem.getTipo_msm();
         Server_Cliente sc;
+        
         try {
             switch (tipo_msm) {
                 case Mensagem.LOGIN:
@@ -134,11 +135,14 @@ public class ServerImpl implements Remote, Cliente_to_server {
                     }
                     break;
                 case Mensagem.MENSAGEM_CHAT_PRIVATE:
+                    
                     sc = procura_cliente_nome(mensagem.getRecebeu());
                     System.out.println(mensagem.toString());
                     if(sc != null){
                         //                                     (int REGISTO, int id_cliente, String nome_quem enviou, String quem_recebe, String msm, String aux)
                         sc.getTm().response_to_cliente(new Mensagem(Mensagem.MENSAGEM_CHAT_PRIVATE, sc.getId(), sc.getNome_cliente(),mensagem.getEnviou(),mensagem.getConteudo_msm(),""));
+                        Server_Cliente me = procura_cliente_ID(mensagem.getId_comunica());
+                        me.getTm().response_to_cliente(new Mensagem(Mensagem.MENSAGEM_CHAT_PRIVATE, me.getId(), me.getNome_cliente(), sc.getNome_cliente(), mensagem.getConteudo_msm(),""));
                     }
                     break;
                 
@@ -217,7 +221,23 @@ public class ServerImpl implements Remote, Cliente_to_server {
                         
                     }
                     break;
-                        
+                case Mensagem.SAIR_GRUPO:
+                    sc = procura_cliente_ID(mensagem.getId_comunica());
+                    if(sc != null){
+                         Grupo user_exit_group = procura_grupoNome(mensagem.getEnviou());
+                         if(user_exit_group != null){
+                             String nome_grupo_to_remove = user_exit_group.getNome_grupo();
+                             if(user_exit_group.getUtilizadores_online().size() == 1){
+                                  remove_grupo(user_exit_group);
+                                  Atualiza_informacaoAll_remove_grupo(Mensagem.ATUALIZA_GRUPOS_REMOVIDO, nome_grupo_to_remove);
+                             }else{
+                                 remove_user_group(user_exit_group, mensagem.getAux());
+                                 atualiza_user_exit_group(Mensagem.ATUALIZA_USER_EXIT_GROUP, user_exit_group, sc.getNome_cliente());
+                             }
+                         }
+                    }
+                    break;
+                       
                     
                     
                 default:
@@ -467,6 +487,36 @@ public class ServerImpl implements Remote, Cliente_to_server {
 
             try {
                 ut_u.getTm().response_to_cliente(new Mensagem(ATUALIZA_GRUPOS_REMOVIDO, nome_grupo_to_remove));
+            } catch (RemoteException ex) {
+                Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+    }
+
+    private void remove_user_group(Grupo user_exit_group, String aux) {
+        
+        ArrayList<User_group> ug = user_exit_group.getUtilizadores_online();
+        Iterator<User_group> itr_ut = ug.iterator();
+        boolean bool = true;
+        while (itr_ut.hasNext() && bool){
+            User_group ut_u = itr_ut.next();
+            if(ut_u.getUser_name().equals(aux)){
+                ug.remove(ut_u);
+                bool = false;
+            }
+        }
+    }
+
+    private void atualiza_user_exit_group(int ATUALIZA_USER_EXIT_GROUP, Grupo user_exit_group, String nome_cliente) {
+        Iterator<User_group> itr_ut = user_exit_group.getUtilizadores_online().iterator();
+
+        while (itr_ut.hasNext()) {
+            User_group ut_u = itr_ut.next();
+            Server_Cliente username = procura_cliente_username(ut_u.getUser_name());
+            
+            try {
+                username.getTm().response_to_cliente(new Mensagem(ATUALIZA_USER_EXIT_GROUP, user_exit_group.getNome_grupo(), username.getNome_cliente(), "Saiu do Grupo"));
             } catch (RemoteException ex) {
                 Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
