@@ -174,24 +174,22 @@ public class Chat_cliente implements Server_to_cliente {
 
                 case Mensagem.MENSAGEM_CHAT_PRIVATE:
                     /* gere forma de mostrar mensagens */
-                    String gere_msm;
+                    String gere_msm = "";
 
                     if (menu_utilizador.L_utilizadores.getSelectedIndex() != -1) {
                         if (menu_utilizador.L_utilizadores.getItem(menu_utilizador.L_utilizadores.getSelectedIndex()).equals(mensagem.getRecebeu())) {
                             gere_msm = "[" + mensagem.getRecebeu() + " > Me] : " + mensagem.getConteudo_msm() + "\n";
-
-                            menu_utilizador.TA_Mensagem.append(gere_msm);
+                        
                         } else if (mensagem.getEnviou().equals(nome_cliente)) {
                             gere_msm = "[" + mensagem.getEnviou()+ " >" +  mensagem.getRecebeu() + " ] :" + mensagem.getConteudo_msm() + "\n";
+                        
                         } else {
-
                             gere_msm = "[" + mensagem.getRecebeu() + " > Me] : " + mensagem.getConteudo_msm() + "\n";
-
                         }
                     } else {
                         gere_msm = "[" + mensagem.getEnviou() + " > Me] : " + mensagem.getConteudo_msm() + "\n";
-
                     }
+                    menu_utilizador.TA_Mensagem.append(gere_msm);
 
 //                    mensagens.add(new Mensagens(msg.getEnviou(), msg.getRecebeu(), msm_padeiro));
 //                    ficheiros.Guarda_Objeto_Ficheiro(mensagens, nome_ficheiro);
@@ -200,7 +198,14 @@ public class Chat_cliente implements Server_to_cliente {
                 case Mensagem.GRUPO_MSM:
                     try {
                         if (menu_utilizador.L_grupos.getSelectedItem().equals(mensagem.getRecebeu())) {
-                            menu_utilizador.TA_Mensagem.append(mensagem.getConteudo_msm() + "\n");
+                            if (nome_cliente.equals(mensagem.getEnviou())) {
+                                gere_msm = "[ Eu ] : " + mensagem.getConteudo_msm() + "\n";
+                        
+                        } else {
+                            gere_msm = "[ " + mensagem.getEnviou()+ " ] :" + mensagem.getConteudo_msm() + "\n";
+                        
+                        }
+                            menu_utilizador.TA_Mensagem.append(gere_msm + "\n");
                         }
                     } catch (Exception e) {
                         System.err.println(e);
@@ -215,11 +220,25 @@ public class Chat_cliente implements Server_to_cliente {
                 case Mensagem.ATUALIZA_GRUPOS_REMOVIDO:
                     menu_utilizador.L_grupos.remove(mensagem.getUser_login());
                     menu_utilizador.TA_Mensagem.append("--> " + mensagem.getUser_login() + " Grupo foi removido\n");
+                    menu_utilizador.Lb_remover.setVisible(false);
+                    menu_utilizador.Lb_sair.setVisible(false);
                     break;
                 case Mensagem.ATUALIZA_USER_EXIT_GROUP:
+                    
                     try {
-                        if (menu_utilizador.L_grupos.getSelectedItem().equals(mensagem.getRecebeu())) {
-                            menu_utilizador.TA_Mensagem.append("Saiu do Grupo" + "\n");
+                        if (menu_utilizador.L_grupos.getSelectedItem().equals(mensagem.getEnviou())) {
+                            if(mensagem.getConteudo_msm() != null){
+                                if( mensagem.getConteudo_msm().equals(user_name)){
+                                    menu_utilizador.TA_Mensagem.append("Saida do grupo com SUCESSO" + "\n");
+                                    menu_utilizador.L_grupos.deselect(menu_utilizador.L_grupos.getSelectedIndex());
+                                    menu_utilizador.Lb_remover.setVisible(false);
+                                    menu_utilizador.Lb_sair.setVisible(false);
+                                }
+                            }
+                            menu_utilizador.TA_Mensagem.append(mensagem.getRecebeu()+ " Saiu do Grupo" + "\n");
+                        }else{
+                            menu_utilizador.Lb_remover.setVisible(false);
+                            menu_utilizador.Lb_sair.setVisible(false);
                         }
                     } catch (Exception e) {
                         System.err.println(e);

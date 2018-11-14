@@ -95,10 +95,8 @@
                   <Component id="Lb_utilizador" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="165" max="-2" attributes="0"/>
                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="96" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="150" max="-2" attributes="0"/>
                   <Component id="lb_apagar" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="lb_editar" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="lb_sair" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
@@ -119,7 +117,6 @@
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="Lb_utilizador" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="lb_apagar" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lb_editar" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="lb_sair" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -218,11 +215,6 @@
         <Component class="javax.swing.JLabel" name="lb_apagar">
           <Properties>
             <Property name="text" type="java.lang.String" value="Apagar Grupo"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="lb_editar">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Editar Grupo"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lb_sair">
@@ -433,8 +425,6 @@
                   <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
                   <Component id="Lb_remover" min="-2" pref="22" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                  <Component id="Lb_editar" min="-2" pref="24" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="Lb_sair" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
@@ -448,7 +438,6 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="Lb_remover" max="32767" attributes="0"/>
                       <Component id="Lb_sair" alignment="0" max="32767" attributes="0"/>
-                      <Component id="Lb_editar" alignment="1" max="32767" attributes="0"/>
                       <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -475,24 +464,6 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="Lb_sairMouseClicked"/>
             <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="Lb_sairMouseEntered"/>
             <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="Lb_sairMouseExited"/>
-          </Events>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
-          </AuxValues>
-        </Component>
-        <Component class="javax.swing.JLabel" name="Lb_editar">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/Imagens/editar.png"/>
-            </Property>
-            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-              <Color id="Hand Cursor"/>
-            </Property>
-          </Properties>
-          <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="Lb_editarMouseClicked"/>
-            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="Lb_editarMouseEntered"/>
-            <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="Lb_editarMouseExited"/>
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>

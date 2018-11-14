@@ -37,12 +37,11 @@ public class Utilizador_menu extends javax.swing.JFrame {
         this.nome_grupo_antigo = "";
         Bt_envia_mensagem.setEnabled(false);
         Anexar_ficheiro.setVisible(false);
-        Lb_editar.setVisible(false);
         Lb_remover.setVisible(false);
         Lb_sair.setVisible(false);
-        lb_editar.setVisible(false);
         lb_sair.setVisible(false);
         lb_apagar.setVisible(false);
+
 
     }
 
@@ -73,7 +72,6 @@ public class Utilizador_menu extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         lb_apagar = new javax.swing.JLabel();
-        lb_editar = new javax.swing.JLabel();
         lb_sair = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         L_utilizadores = new java.awt.List();
@@ -87,7 +85,6 @@ public class Utilizador_menu extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         Lb_sair = new javax.swing.JLabel();
-        Lb_editar = new javax.swing.JLabel();
         Lb_remover = new javax.swing.JLabel();
         Tb_mensagem = new javax.swing.JTextField();
         Bt_envia_mensagem = new javax.swing.JButton();
@@ -143,8 +140,6 @@ public class Utilizador_menu extends javax.swing.JFrame {
 
         lb_apagar.setText("Apagar Grupo");
 
-        lb_editar.setText("Editar Grupo");
-
         lb_sair.setText("Sair Grupo");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -158,10 +153,8 @@ public class Utilizador_menu extends javax.swing.JFrame {
                 .addComponent(Lb_utilizador)
                 .addGap(165, 165, 165)
                 .addComponent(jLabel2)
-                .addGap(96, 96, 96)
+                .addGap(150, 150, 150)
                 .addComponent(lb_apagar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lb_editar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lb_sair)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -180,7 +173,6 @@ public class Utilizador_menu extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(Lb_utilizador)
                     .addComponent(lb_apagar)
-                    .addComponent(lb_editar)
                     .addComponent(lb_sair))
                 .addContainerGap())
             .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -319,20 +311,6 @@ public class Utilizador_menu extends javax.swing.JFrame {
             }
         });
 
-        Lb_editar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/editar.png"))); // NOI18N
-        Lb_editar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Lb_editar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                Lb_editarMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                Lb_editarMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                Lb_editarMouseExited(evt);
-            }
-        });
-
         Lb_remover.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/remove.png"))); // NOI18N
         Lb_remover.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Lb_remover.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -356,8 +334,6 @@ public class Utilizador_menu extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(Lb_remover, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addComponent(Lb_editar, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(Lb_sair)
                 .addGap(21, 21, 21))
@@ -369,7 +345,6 @@ public class Utilizador_menu extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Lb_remover, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(Lb_sair, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Lb_editar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel5))
                 .addContainerGap())
         );
@@ -510,7 +485,6 @@ public class Utilizador_menu extends javax.swing.JFrame {
         if (evt.getClickCount() == 2) {
             try {
                 tipo_msg = Mensagem.MENSAGEM_CHAT_PRIVATE;
-                Lb_editar.setVisible(false);
                 Lb_remover.setVisible(false);
                 Lb_sair.setVisible(false);
 
@@ -576,7 +550,6 @@ public class Utilizador_menu extends javax.swing.JFrame {
         if (evt.getClickCount() == 2) {
             if (L_grupos.getSelectedItem() != null) {
                 tipo_msg = Mensagem.GRUPO_MSM;
-                Lb_editar.setVisible(true);
                 Lb_remover.setVisible(true);
                 Lb_sair.setVisible(true);
 
@@ -772,8 +745,13 @@ public class Utilizador_menu extends javax.swing.JFrame {
         }
 
         if (!target_nome_grupo.trim().isEmpty()) {
-            Tb_mensagem.setText("");
-//            client.getClient().envia_mensagem(new Message(Message.SAIR_GRUPO, utilizador_nome, target_nome_grupo, "Saiu do Grupo", "Sair Grupo"));
+            
+                Tb_mensagem.setText("");
+            try {
+                cliente.getS_comunica().comunica_com_server(new Mensagem(Mensagem.SAIR_GRUPO, cliente.getId_cliente(), target_nome_grupo, "Remover", "Sair Grupo"));
+            } catch (RemoteException ex) {
+                Logger.getLogger(Utilizador_menu.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
         }
     }//GEN-LAST:event_Lb_sairMouseClicked
@@ -798,26 +776,6 @@ public class Utilizador_menu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_Lb_removerMouseClicked
 
-    private void Lb_editarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Lb_editarMouseClicked
-//        String target_nome_grupo = "";
-//
-//        String nome_novo_grupo = JOptionPane.showInputDialog(this, "Alterar nome do grupo");
-//        try {
-//            target_nome_grupo = L_grupos.getSelectedItem();
-//        } catch (ArrayIndexOutOfBoundsException ex) {
-//            System.out.println(ex);
-//            target_nome_grupo = "";
-//        }
-//
-//        if (nome_novo_grupo != null) {
-//            if (!target_nome_grupo.trim().isEmpty() && !nome_novo_grupo.trim().isEmpty()) {
-//                Tb_mensagem.setText("");
-//                client.getClient().envia_mensagem(new Message(Message.MODIFICAR_GRUPO, utilizador_nome, target_nome_grupo, nome_novo_grupo, "Modificar Grupo"));
-//
-//            }
-//        }
-    }//GEN-LAST:event_Lb_editarMouseClicked
-
     private void Lb_removerMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Lb_removerMouseEntered
         lb_apagar.setVisible(true);
     }//GEN-LAST:event_Lb_removerMouseEntered
@@ -825,14 +783,6 @@ public class Utilizador_menu extends javax.swing.JFrame {
     private void Lb_removerMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Lb_removerMouseExited
         lb_apagar.setVisible(false);
     }//GEN-LAST:event_Lb_removerMouseExited
-
-    private void Lb_editarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Lb_editarMouseEntered
-        lb_editar.setVisible(true);
-    }//GEN-LAST:event_Lb_editarMouseEntered
-
-    private void Lb_editarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Lb_editarMouseExited
-        lb_editar.setVisible(false);
-    }//GEN-LAST:event_Lb_editarMouseExited
 
     private void Lb_sairMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Lb_sairMouseEntered
         lb_sair.setVisible(true);
@@ -850,7 +800,6 @@ public class Utilizador_menu extends javax.swing.JFrame {
     public java.awt.List L_grupos;
     public java.awt.List L_utilizadores;
     public java.awt.List L_utilizadores_grupo;
-    public javax.swing.JLabel Lb_editar;
     public javax.swing.JLabel Lb_remover;
     public javax.swing.JLabel Lb_sair;
     private javax.swing.JLabel Lb_utilizador;
@@ -874,7 +823,6 @@ public class Utilizador_menu extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lb_apagar;
-    private javax.swing.JLabel lb_editar;
     private javax.swing.JLabel lb_sair;
     // End of variables declaration//GEN-END:variables
 
