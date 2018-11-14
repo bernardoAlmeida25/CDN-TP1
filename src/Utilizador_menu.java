@@ -9,12 +9,14 @@
 import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -28,6 +30,7 @@ public class Utilizador_menu extends javax.swing.JFrame {
     protected Chat_cliente cliente;
     protected int tipo_msg;
     protected String nome_grupo_antigo;
+    public File ficheiro;
     
     public Utilizador_menu() {
         initComponents();
@@ -90,8 +93,6 @@ public class Utilizador_menu extends javax.swing.JFrame {
         Bt_envia_mensagem = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel_chefe_grupo = new javax.swing.JLabel();
-        jLabel7_grupo_name = new javax.swing.JLabel();
         L_utilizadores_grupo = new java.awt.List();
         Anexar_ficheiro = new javax.swing.JLabel();
 
@@ -378,10 +379,6 @@ public class Utilizador_menu extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Grupo");
 
-        jLabel_chefe_grupo.setText("Criador do grupo");
-
-        jLabel7_grupo_name.setText("Nome do Grupo");
-
         L_utilizadores_grupo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         L_utilizadores_grupo.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
         L_utilizadores_grupo.setForeground(new java.awt.Color(255, 0, 102));
@@ -402,28 +399,17 @@ public class Utilizador_menu extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(L_utilizadores_grupo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel_chefe_grupo, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7_grupo_name, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(57, 57, 57)
-                        .addComponent(jLabel4)))
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addGap(57, 57, 57)
+                .addComponent(jLabel4)
+                .addContainerGap(73, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(63, 63, 63)
                 .addComponent(jLabel4)
-                .addGap(29, 29, 29)
-                .addComponent(jLabel_chefe_grupo)
-                .addGap(35, 35, 35)
-                .addComponent(jLabel7_grupo_name)
-                .addGap(51, 51, 51)
-                .addComponent(L_utilizadores_grupo, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(47, 47, 47)
+                .addComponent(L_utilizadores_grupo, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(56, Short.MAX_VALUE))
         );
 
@@ -665,18 +651,22 @@ public class Utilizador_menu extends javax.swing.JFrame {
         } catch (ArrayIndexOutOfBoundsException e) {
             System.err.println("Erro ao selecionar " + e);
         }
-//
-//        if (ficheiro != null) {
-//            long size = ficheiro.length();
-//            if (size < 120 * 1024 * 1024) {
-//                client.getClient().envia_mensagem(new Message(Message.FICHEIRO_PED, utilizador_nome, target_nome, ficheiro.getName(), "Envio Ficheiro"));
-//            } else {
-//
-//                TA_Mensagem.append("[Application > Me] : O ficheiro é demasiado grande!");
-//
-//            }
-//        }
-//
+        
+        if (ficheiro != null) {
+            long size = ficheiro.length();
+            if (size < 120 * 1024 * 1024) {
+                try {
+                    cliente.getS_comunica().comunica_com_server(new Mensagem(Mensagem.PED_ENVIAR_FICHEIRO,cliente.getId_cliente(), utilizador_nome, target_nome, ficheiro.getName(), "Envio Ficheiro"));
+                } catch (RemoteException ex) {
+                    Logger.getLogger(Utilizador_menu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+
+                TA_Mensagem.append("[Application > Me] : O ficheiro é demasiado grande!");
+
+            }
+        }
+
         if (!msg.trim().isEmpty() && !target_nome.trim().isEmpty()) {
             try {
                 Tb_mensagem.setText("");
@@ -694,30 +684,30 @@ public class Utilizador_menu extends javax.swing.JFrame {
     }//GEN-LAST:event_L_utilizadoresHierarchyChanged
 
     private void Anexar_ficheiroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Anexar_ficheiroMouseClicked
-//        JFileChooser fileChooser = new JFileChooser();
-//        fileChooser.showDialog(this, "Select File");
-//        ficheiro = fileChooser.getSelectedFile();
-//
-//        if (ficheiro != null) {
-//            if (!ficheiro.getName().isEmpty()) {
-//                String str;
-//                String path = ficheiro.getPath();
-//
-//                if (path.length() > 30) {
-//                    String t = path;
-//                    str = t.substring(0, 20) + " [...] " + t.substring(t.length() - 20, t.length());
-//                } else {
-//                    str = path;
-//                }
-//
-//                TA_Mensagem.append("[Application] : Ficheiro carregado!");
-//
-//            } else {
-//
-//                TA_Mensagem.append("[Application] : Erro ao carregar ficheiro!");
-//
-//            }
-//        }
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.showDialog(this, "Select File");
+        ficheiro = fileChooser.getSelectedFile();
+
+        if (ficheiro != null) {
+            if (!ficheiro.getName().isEmpty()) {
+                String str;
+                String path = ficheiro.getPath();
+
+                if (path.length() > 30) {
+                    String t = path;
+                    str = t.substring(0, 20) + " [...] " + t.substring(t.length() - 20, t.length());
+                } else {
+                    str = path;
+                }
+
+                TA_Mensagem.append("[Application] : Ficheiro carregado!");
+
+            } else {
+
+                TA_Mensagem.append("[Application] : Erro ao carregar ficheiro!");
+
+            }
+        }
     }//GEN-LAST:event_Anexar_ficheiroMouseClicked
 
     private void Tb_mensagemKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Tb_mensagemKeyPressed
@@ -811,9 +801,7 @@ public class Utilizador_menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    public javax.swing.JLabel jLabel7_grupo_name;
     private javax.swing.JLabel jLabel8;
-    public javax.swing.JLabel jLabel_chefe_grupo;
     private javax.swing.JLabel jLabel_close_window;
     private javax.swing.JLabel jLabel_minimizar;
     private javax.swing.JPanel jPanel1;

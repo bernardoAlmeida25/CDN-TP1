@@ -238,6 +238,15 @@ public class ServerImpl implements Remote, Cliente_to_server {
                          }
                     }
                     break;
+                
+                case Mensagem.PED_ENVIAR_FICHEIRO:
+                    // recebe pedido de envio de ficheiro
+                    sc = procura_cliente_ID(mensagem.getId_comunica()); //quem enviou pedido para enviar ficheiro
+                    if (sc != null) {
+                        Server_Cliente quem_recebe_file = procura_cliente_nome(mensagem.getRecebeu()); // quem vai receber o ficheiro
+                        quem_recebe_file.getTm().response_to_cliente(new Mensagem(Mensagem.PED_ENVIAR_FICHEIRO, sc.getId(),mensagem.getEnviou(), quem_recebe_file.getUsername_cliente(), mensagem.getConteudo_msm()));
+                    }
+                    break;
                        
                     
                     

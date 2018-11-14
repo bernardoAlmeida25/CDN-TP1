@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * @author pedro
  */
 public class Mensagem implements Serializable{
-    public static final int LOGIN = 0, REGISTO = 1, ATUALIZA_USERS_LOGIN = 2,MENSAGEM_CHAT_PRIVATE = 3, GRUPO = 4,ATUALIZA_GRUPOS = 5,GRUPO_MSM = 6, GRUPO_JUNTAR = 7,SAIR = 8,REMOVER_GRUPO = 9,ATUALIZA_GRUPOS_REMOVIDO = 10, SAIR_GRUPO = 11, ATUALIZA_USER_EXIT_GROUP = 12;
+    public static final int LOGIN = 0, REGISTO = 1, ATUALIZA_USERS_LOGIN = 2,MENSAGEM_CHAT_PRIVATE = 3, GRUPO = 4,ATUALIZA_GRUPOS = 5,GRUPO_MSM = 6, GRUPO_JUNTAR = 7,SAIR = 8,REMOVER_GRUPO = 9,ATUALIZA_GRUPOS_REMOVIDO = 10, SAIR_GRUPO = 11, ATUALIZA_USER_EXIT_GROUP = 12,FICHEIRO_ENV = 13,PED_ENVIAR_FICHEIRO = 14;
     protected int tipo_msm;
     protected int id_comunica;
     protected boolean bool;
