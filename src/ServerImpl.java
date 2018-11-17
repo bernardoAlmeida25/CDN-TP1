@@ -35,6 +35,9 @@ public class ServerImpl implements Remote, Cliente_to_server {
         this.clientes = new ArrayList<>();
         this.grupos = new ArrayList<>();
         this.user = new ArrayList<>();
+        this.user.add(new User("aaaa", "aaaa", "aaaa"));
+        this.user.add(new User("bbbb", "bbbb", "bbbb"));
+        this.user.add(new User("cccc", "cccc", "cccc"));
     }
 
     public static void main(String[] args) {
@@ -171,6 +174,7 @@ public class ServerImpl implements Remote, Cliente_to_server {
                             Verifica_SeUser_ExisteOtherGroups_and_Remove( sc.getUsername_cliente()); //Verifica se o utilizador já pertence ao grupo
                             add_util_grupo.add_utilizador(new User_group(sc.getNome_cliente(), sc.getUsername_cliente())); //Adiciona o utilizador a um array de usernames
                         }
+                        sc.getTm().response_to_cliente(new Mensagem(Mensagem.ATUALAZIAR_GRUPOS, sc.getId(), sc.getUsername_cliente(), sc.getNome_cliente(), add_util_grupo));
                     }
                     break;
                     
@@ -239,17 +243,22 @@ public class ServerImpl implements Remote, Cliente_to_server {
                     }
                     break;
                 
-                case Mensagem.PED_ENVIAR_FICHEIRO:
+                case Mensagem.ENVIA_FILE:
                     // recebe pedido de envio de ficheiro
                     sc = procura_cliente_ID(mensagem.getId_comunica()); //quem enviou pedido para enviar ficheiro
                     if (sc != null) {
-                        Server_Cliente quem_recebe_file = procura_cliente_nome(mensagem.getRecebeu()); // quem vai receber o ficheiro
-                        quem_recebe_file.getTm().response_to_cliente(new Mensagem(Mensagem.PED_ENVIAR_FICHEIRO, sc.getId(),mensagem.getEnviou(), quem_recebe_file.getUsername_cliente(), mensagem.getConteudo_msm()));
+                        if(mensagem.getTipo_msm_file() == Mensagem.MENSAGEM_CHAT_PRIVATE){
+                            Server_Cliente quem_recebe_file = procura_cliente_nome(mensagem.getRecebeu()); // quem vai receber o ficheiro
+                            quem_recebe_file.getTm().response_to_cliente(new Mensagem(Mensagem.ENVIA_FILE, sc.getId(),sc.getNome_cliente(), quem_recebe_file.getUsername_cliente(), mensagem.getConteudo_msm(),mensagem.getTipo_msm_file(),mensagem.getFile()));
+                        }else if(mensagem.getTipo_msm_file() == Mensagem.GRUPO_MSM){
+                            Grupo procura_grupo = procura_grupoNomeUser(mensagem.getRecebeu());
+                            if (procura_grupo != null) { //verifica se o utilizador existe naquele grupo  
+                                send_file_to_all_member_group(procura_grupo, sc.getNome_cliente(), mensagem);
+                            }
+                        }
                     }
                     break;
-                       
-                    
-                    
+ 
                 default:
                     System.out.println("Opção Inválida");
             }
@@ -529,6 +538,23 @@ public class ServerImpl implements Remote, Cliente_to_server {
                 username.getTm().response_to_cliente(new Mensagem(ATUALIZA_USER_EXIT_GROUP, user_exit_group.getNome_grupo(), nome_cliente, "Saiu do Grupo"));
             } catch (RemoteException ex) {
                 Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+    }
+
+    private void send_file_to_all_member_group(Grupo procura_grupo, String quem_enviou, Mensagem mensagem) {
+        Iterator<User_group> itr_ut = procura_grupo.getUtilizadores_online().iterator();
+        Server_Cliente cliente;
+        while (itr_ut.hasNext()) {
+            User_group ut_u = itr_ut.next();
+            cliente = procura_cliente_username(ut_u.getUser_name());
+            if( !cliente.getNome_cliente().equals(quem_enviou)){
+                try {
+                    cliente.getTm().response_to_cliente(new Mensagem(Mensagem.ENVIA_FILE, 0,quem_enviou, cliente.getUsername_cliente(), mensagem.getConteudo_msm(),mensagem.getTipo_msm_file(),mensagem.getFile()));
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
         }

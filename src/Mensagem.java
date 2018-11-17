@@ -13,14 +13,18 @@ import java.util.ArrayList;
  * @author pedro
  */
 public class Mensagem implements Serializable{
-    public static final int LOGIN = 0, REGISTO = 1, ATUALIZA_USERS_LOGIN = 2,MENSAGEM_CHAT_PRIVATE = 3, GRUPO = 4,ATUALIZA_GRUPOS = 5,GRUPO_MSM = 6, GRUPO_JUNTAR = 7,SAIR = 8,REMOVER_GRUPO = 9,ATUALIZA_GRUPOS_REMOVIDO = 10, SAIR_GRUPO = 11, ATUALIZA_USER_EXIT_GROUP = 12,FICHEIRO_ENV = 13,PED_ENVIAR_FICHEIRO = 14;
-    protected int tipo_msm;
+    public static final int LOGIN = 0, REGISTO = 1, ATUALIZA_USERS_LOGIN = 2,MENSAGEM_CHAT_PRIVATE = 3, GRUPO = 4,ATUALIZA_GRUPOS = 5,GRUPO_MSM = 6, GRUPO_JUNTAR = 7,SAIR = 8,REMOVER_GRUPO = 9,ATUALIZA_GRUPOS_REMOVIDO = 10, SAIR_GRUPO = 11, ATUALIZA_USER_EXIT_GROUP = 12,ENVIA_FILE = 13,ATUALAZIAR_GRUPOS = 14;
+    protected int tipo_msm,tipo_msm_file;
     protected int id_comunica;
     protected boolean bool;
+    protected byte[] file;
+    protected Grupo grupo;
+
+
    //variaveis utilizadas no protocolo
     protected String enviou, recebeu, conteudo_msm, aux,aux2,user_login;
     protected ArrayList<String> array_utilizadores; //lista de utilizadores para saber utiladores on
-    protected ArrayList<String> grupos_criados; //lista de grupos para saber grupos
+    protected ArrayList<Grupo> grupos_criados; //lista de grupos para saber grupos
     
     //variavel yes or not
 
@@ -42,6 +46,18 @@ public class Mensagem implements Serializable{
         
     }
     
+    // tipo msms, id_cliente, quem_enviou, quem_recebe, nome_ficheiro, aux, file
+    public Mensagem(int REGISTO, int id_cliente, String nome_user, String nome_quem_recebe, String nome_ficheiro, int aux,byte[] file_to_send) {
+        this.tipo_msm = REGISTO;
+        this.id_comunica = id_cliente;
+        this.enviou = nome_user;
+        this.recebeu = nome_quem_recebe;
+        this.conteudo_msm = nome_ficheiro;
+        this.tipo_msm_file = aux;
+        this.file = file_to_send;
+        
+    }
+    
     public Mensagem(int REGISTO, int id_cliente, String username_var, String quem_recebe, String msm, String aux) {
         this.tipo_msm = REGISTO;
         this.id_comunica = id_cliente;
@@ -60,14 +76,14 @@ public class Mensagem implements Serializable{
         this.bool = login;
     }
 
-    public Mensagem(int LOGIN, int id, String username_cliente, String nome_cliente, boolean login, ArrayList nome_user_online, ArrayList arrayList) {
+    public Mensagem(int LOGIN, int id, String username_cliente, String nome_cliente, boolean login, ArrayList nome_user_online, ArrayList groups) {
         this.tipo_msm = LOGIN;
         this.id_comunica = id;
         this.enviou = username_cliente;
         this.recebeu = nome_cliente;
         this.bool = login;
         this.array_utilizadores = nome_user_online;
-        this.grupos_criados = arrayList;
+        this.grupos_criados = groups;
     }
 
     public Mensagem(int ATUALIZA_USERS_LOGIN, String nome) {
@@ -80,6 +96,14 @@ public class Mensagem implements Serializable{
         this.enviou = enviou;
         this.recebeu = nome_grupo;
         this.conteudo_msm = conteudo_msm;
+    }
+
+    Mensagem(int ATUALAZIAR_GRUPOS, int id, String username_cliente, String nome_cliente, Grupo add_util_grupo) {
+        this.tipo_msm = ATUALAZIAR_GRUPOS;
+        this.id_comunica = id;
+        this.enviou = username_cliente;
+        this.recebeu = nome_cliente;
+        this.grupo = add_util_grupo;
     }
 
     public int getTipo_msm() {
@@ -154,11 +178,11 @@ public class Mensagem implements Serializable{
         this.array_utilizadores = array_utilizadores;
     }
 
-    public ArrayList<String> getGrupos_criados() {
+    public ArrayList<Grupo> getGrupos_criados() {
         return grupos_criados;
     }
 
-    public void setGrupos_criados(ArrayList<String> grupos_criados) {
+    public void setGrupos_criados(ArrayList<Grupo> grupos_criados) {
         this.grupos_criados = grupos_criados;
     }
 
@@ -168,6 +192,30 @@ public class Mensagem implements Serializable{
 
     public void setUser_login(String user_login) {
         this.user_login = user_login;
+    }
+    
+    public byte[] getFile() {
+        return file;
+    }
+
+    public void setFile(byte[] file) {
+        this.file = file;
+    }
+
+    public int getTipo_msm_file() {
+        return tipo_msm_file;
+    }
+
+    public void setTipo_msm_file(int tipo_msm_file) {
+        this.tipo_msm_file = tipo_msm_file;
+    }
+
+    public Grupo getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(Grupo grupo) {
+        this.grupo = grupo;
     }
 
     @Override

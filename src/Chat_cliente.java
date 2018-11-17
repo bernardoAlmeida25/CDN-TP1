@@ -1,5 +1,7 @@
 
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -7,6 +9,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Iterator;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 
@@ -189,7 +192,7 @@ public class Chat_cliente implements Server_to_cliente {
                     } else {
                         gere_msm = "[" + mensagem.getEnviou() + " > Me] : " + mensagem.getConteudo_msm() + "\n";
                     }
-                    menu_utilizador.TA_Mensagem.append(gere_msm);
+                    menu_utilizador.TA_Mensagem.append("\n"+gere_msm);
 
 //                    mensagens.add(new Mensagens(msg.getEnviou(), msg.getRecebeu(), msm_padeiro));
 //                    ficheiros.Guarda_Objeto_Ficheiro(mensagens, nome_ficheiro);
@@ -214,7 +217,7 @@ public class Chat_cliente implements Server_to_cliente {
 
                 case Mensagem.SAIR:
                     menu_utilizador.L_utilizadores.remove(mensagem.getUser_login());
-                    menu_utilizador.TA_Mensagem.append("--> " + mensagem.getUser_login() + " saiu do Chat\n");
+                    menu_utilizador.TA_Mensagem.append("\n--> " + mensagem.getUser_login() + " saiu do Chat\n");
                     break;
 
                 case Mensagem.ATUALIZA_GRUPOS_REMOVIDO:
@@ -244,6 +247,32 @@ public class Chat_cliente implements Server_to_cliente {
                         System.err.println(e);
                     }
                     break;
+                case Mensagem.ENVIA_FILE:
+                    /* pergunta se quer aceitar receber um ficheiro e onde guardar*/
+                    if (JOptionPane.showConfirmDialog(menu_utilizador, ("Aceita o ficheiro '" + mensagem.getConteudo_msm()+ "' de " + mensagem.getEnviou() + " ?")) == 0) {
+
+                        JFileChooser jf = new JFileChooser();
+                        jf.setSelectedFile(new File(mensagem.getConteudo_msm()));
+                        int returnVal = jf.showSaveDialog(menu_utilizador);
+
+                        String saveTo = jf.getSelectedFile().getPath();
+                        if (saveTo != null && returnVal == JFileChooser.APPROVE_OPTION) {
+                            try (FileOutputStream fos = new FileOutputStream(saveTo)) {
+                                fos.write(mensagem.getFile());
+                                fos.close();
+                            }
+                            menu_utilizador.TA_Mensagem.append("\n "+mensagem.getConteudo_msm()+ " guardado com sucesso" + "\n");
+                        } else {
+                            menu_utilizador.TA_Mensagem.append("\n Erro ao guardar o Ficheiro "+mensagem.getConteudo_msm() + "\n");
+                        }
+                    } else {
+                        menu_utilizador.TA_Mensagem.append("\n Nao aceitas-te o ficheiro de "+mensagem.getEnviou() + "\n");
+                    }
+                    break;
+                
+                case Mensagem.ATUALAZIAR_GRUPOS:
+                    atualiza_user_group( mensagem.getGrupo());
+                    break;
 
                 default:
                     System.out.println("Opção Inválida USER");
@@ -253,106 +282,47 @@ public class Chat_cliente implements Server_to_cliente {
         }
     }
 
-//    @Override
-//    public synchronized void response_registo_client(Boolean d, int id) throws RemoteException {
-//        if (d) {
-//            System.err.println("Registo com Sucesso!!");
-//            this.id_cliente = id;
-//
-//            this.novo_registo = null;
-//            this.menu_inicial.setVisible(true);
-//            this.menu_inicial.pack();
-//            this.menu_inicial.setLocationRelativeTo(null);
-//
-//        } else {
-//
-//            System.err.println("Registo falhou!");
-////            JOptionPane.showMessageDialog(novo_registo,
-////                    "Registo Falhou",
-////                    "Erro de Registo",
-////                    JOptionPane.ERROR_MESSAGE);
-//        }
-//    }
-//
-//    @Override
-//    public synchronized void response_login_client(boolean login, int id, String username_cliente, String nome_cliente, ArrayList nome_user_online, ArrayList groups) throws RemoteException {
-//        if (login) {
-//            System.err.println("Login com Sucesso!!");
-//
-//            this.id_cliente = id;
-//            this.user_name = username_cliente;
-//            this.nome_cliente = nome_cliente;
-//
-////            this.menu_inicial.dispose();
-//            this.menu_utilizador.setVisible(true);
-//            this.menu_utilizador.pack();
-//            this.menu_utilizador.setLocationRelativeTo(null);
-//            this.menu_utilizador.chat_menu(this, nome_cliente);
-//            atualiza_chat_menu(nome_user_online, groups);
-////            this.menu_inicial.dispose();
-//        } else {
-//
-//            System.err.println("Login incorreto");
-////            JOptionPane.showMessageDialog(this.menu_inicial,
-////                    "Username ou palavra passe estao incorretos",
-////                    "Erro de Login",
-////                    JOptionPane.ERROR_MESSAGE);
-//        }
-//    }
-//
-//    @Override
-//    public synchronized void response_envia_mensagem(String enviou, String conteudo_msm) throws RemoteException {
-//        /* gere forma de mostrar mensagens */
-//        System.err.println(conteudo_msm);
-////        String msm_padeiro;
-////        if (msg.getAux().equals(frame_MenuInicial.getUsername_utilizador())) {
-////            if (frame_MenuInicial.getMenu_utilizador().L_utilizadores.getSelectedIndex() != -1) {
-////                if (frame_MenuInicial.getMenu_utilizador().L_utilizadores.getItem(frame_MenuInicial.getMenu_utilizador().L_utilizadores.getSelectedIndex()).equals(msg.getEnviou())) {
-////                    msm_padeiro = "[" + msg.getEnviou() + " > Me] : " + msg.getConteudo_msm() + "\n";
-////
-//        menu_utilizador.TA_Mensagem.append(conteudo_msm);
-////                } else {
-////                    msm_padeiro = "[" + msg.getEnviou() + " > Me] : " + msg.getConteudo_msm() + "\n";
-////
-////                }
-////            } else {
-////                msm_padeiro = "[" + msg.getEnviou() + " > Me] : " + msg.getConteudo_msm() + "\n";
-////
-////            }
-////        } else {
-////            msm_padeiro = "[" + msg.getEnviou() + " > " + msg.getRecebeu() + "] : " + msg.getConteudo_msm() + "\n";
-////            frame_MenuInicial.getMenu_utilizador().TA_Mensagem.append(msm_padeiro);
-////        }
-////        mensagens.add(new Mensagens(msg.getEnviou(), msg.getRecebeu(), msm_padeiro));
-////        ficheiros.Guarda_Objeto_Ficheiro(mensagens, nome_ficheiro);
-//    }
-//
-//    @Override
-//    public synchronized void response_novo_login(int id, int id0, String nome) throws RemoteException {
-//        menu_utilizador.L_utilizadores.add(nome);
-//    }
-
     /*
     **
     ** METODOS DE RESPOSTA DO SERVER
      */
     public void atualiza_chat_menu(ArrayList user_on, ArrayList groups) {
-        Iterator<String> itr_ut = user_on.iterator();
+        
 
-        while (itr_ut.hasNext()) {
-            String ut_u = itr_ut.next();
+        if(user_on != null){
+            Iterator<String> itr_ut = user_on.iterator();
+            while (itr_ut.hasNext()) {
+                String ut_u = itr_ut.next();
 
-            menu_utilizador.L_utilizadores.add(ut_u);
+                menu_utilizador.L_utilizadores.add(ut_u);
 
+            }
         }
 
-        Iterator<String> itr_gr = groups.iterator();
+        if(groups != null){
+            Iterator<String> itr_gr = groups.iterator();
 
-        while (itr_gr.hasNext()) {
-            String ut_g = itr_gr.next();
+            while (itr_gr.hasNext()) {
+                String ut_g = itr_gr.next();
 
-            menu_utilizador.L_grupos.add(ut_g);
+                menu_utilizador.L_grupos.add(ut_g);
 
+            }
+        }
+    }
+    
+    private void atualiza_user_group(Grupo grupo_criado) {
+        if(grupo_criado != null){
+            Iterator<User_group> itr_gr = grupo_criado.getUtilizadores_online().iterator();
+
+            while (itr_gr.hasNext()) {
+                User_group ut_g = itr_gr.next();
+                if(!ut_g.getUser_name().equals(user_name)){
+                    menu_utilizador.L_utilizadores_grupo.add(ut_g.getNome_user());
+                }
+            }
+            menu_utilizador.jLabel_chefe_grupo.setText(grupo_criado.getNome_criador());
+            menu_utilizador.jLabel7_grupo_name.setText(grupo_criado.getNome_grupo());
         }
     }
 
@@ -416,5 +386,7 @@ public class Chat_cliente implements Server_to_cliente {
     public String toString() {
         return "Chat_cliente{" + "s_comunica=" + s_comunica + ", start=" + menu_inicial + ", id_cliente=" + id_cliente + '}';
     }
+
+    
 
 }
