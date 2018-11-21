@@ -15,11 +15,13 @@ public class User implements Serializable{
     protected String nome_cliente;
     protected String username_cliente;
     protected String password_cliente;
+    protected boolean online;
 
     public User(String nome_cliente, String username_cliente, String password_cliente) {
         this.nome_cliente = nome_cliente;
         this.username_cliente = username_cliente;
         this.password_cliente = password_cliente;
+        this.online = false;
     }
 
     public String getNome_cliente() {
@@ -44,6 +46,14 @@ public class User implements Serializable{
 
     public void setPassword_cliente(String password_cliente) {
         this.password_cliente = password_cliente;
+    }
+
+    public boolean isOnline() {
+        return online;
+    }
+
+    public void setOnline(boolean online) {
+        this.online = online;
     }
     
     

@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * @author pedro
  */
 public class Mensagem implements Serializable{
-    public static final int LOGIN = 0, REGISTO = 1, ATUALIZA_USERS_LOGIN = 2,MENSAGEM_CHAT_PRIVATE = 3, GRUPO = 4,ATUALIZA_GRUPOS = 5,GRUPO_MSM = 6, GRUPO_JUNTAR = 7,SAIR = 8,REMOVER_GRUPO = 9,ATUALIZA_GRUPOS_REMOVIDO = 10, SAIR_GRUPO = 11, ATUALIZA_USER_EXIT_GROUP = 12,ENVIA_FILE = 13,ATUALAZIAR_GRUPOS = 14;
+    public static final int LOGIN = 0, REGISTO = 1, ATUALIZA_USERS_LOGIN = 2,MENSAGEM_CHAT_PRIVATE = 3, GRUPO = 4,ATUALIZA_GRUPOS = 5,GRUPO_MSM = 6, GRUPO_JUNTAR = 7,SAIR = 8,REMOVER_GRUPO = 9,ATUALIZA_GRUPOS_REMOVIDO = 10, SAIR_GRUPO = 11, ATUALIZA_USER_EXIT_GROUP = 12,ENVIA_FILE = 13,ATUALAZIAR_GRUPOS = 14,UTILIZADORES_REGISTADOS = 15,CHANGE_USER_CHAT=16,ATUALIZAR_MENSAGENS_OFFLINE = 17,MENSAGEM_GERAL = 18;
     protected int tipo_msm,tipo_msm_file;
     protected int id_comunica;
     protected boolean bool;
@@ -25,8 +25,10 @@ public class Mensagem implements Serializable{
     protected String enviou, recebeu, conteudo_msm, aux,aux2,user_login;
     protected ArrayList<String> array_utilizadores; //lista de utilizadores para saber utiladores on
     protected ArrayList<Grupo> grupos_criados; //lista de grupos para saber grupos
+    //protected ArrayList<Save_mensagens> m;
     
     //variavel yes or not
+    private ArrayList<Save_mensagens> mensagens_offline;
 
     
     //variavel yes or not
@@ -98,12 +100,25 @@ public class Mensagem implements Serializable{
         this.conteudo_msm = conteudo_msm;
     }
 
-    Mensagem(int ATUALAZIAR_GRUPOS, int id, String username_cliente, String nome_cliente, Grupo add_util_grupo) {
+    public Mensagem(int ATUALAZIAR_GRUPOS, int id, String username_cliente, String nome_cliente, Grupo add_util_grupo) {
         this.tipo_msm = ATUALAZIAR_GRUPOS;
         this.id_comunica = id;
         this.enviou = username_cliente;
         this.recebeu = nome_cliente;
         this.grupo = add_util_grupo;
+    }
+
+
+    public Mensagem(int UTILIZADORES_REGISTADOS, int id, ArrayList<Save_mensagens> mensagens) {
+        this.tipo_msm = UTILIZADORES_REGISTADOS;
+        this.id_comunica = id;
+        this.mensagens_offline = mensagens;
+    }
+
+    public Mensagem(int UTILIZADORES_REGISTADOS, int id, ArrayList<String> nome_registados, String a) {
+        this.tipo_msm = UTILIZADORES_REGISTADOS;
+        this.id_comunica = id;
+        this.array_utilizadores = nome_registados;
     }
 
     public int getTipo_msm() {
@@ -218,6 +233,15 @@ public class Mensagem implements Serializable{
         this.grupo = grupo;
     }
 
+    public ArrayList<Save_mensagens> getMensagens_offline() {
+        return mensagens_offline;
+    }
+
+    public void setMensagens_offline(ArrayList<Save_mensagens> mensagens_offline) {
+        this.mensagens_offline = mensagens_offline;
+    }
+
+    
     @Override
     public String toString() {
         return "Mensagem{" + "tipo_msm=" + tipo_msm + ", id_comunica=" + id_comunica + ", bool=" + bool + ", enviou=" + enviou + ", recebeu=" + recebeu + ", conteudo_msm=" + conteudo_msm + ", aux=" + aux + ", aux2=" + aux2 + ", user_login=" + user_login + ", array_utilizadores=" + array_utilizadores + ", grupos_criados=" + grupos_criados + '}';

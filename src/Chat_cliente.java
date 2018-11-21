@@ -184,18 +184,16 @@ public class Chat_cliente implements Server_to_cliente {
                             gere_msm = "[" + mensagem.getRecebeu() + " > Me] : " + mensagem.getConteudo_msm() + "\n";
                         
                         } else if (mensagem.getEnviou().equals(nome_cliente)) {
-                            gere_msm = "[" + mensagem.getEnviou()+ " >" +  mensagem.getRecebeu() + " ] :" + mensagem.getConteudo_msm() + "\n";
+                            gere_msm = "[" + mensagem.getEnviou()+ " >" +  mensagem.getRecebeu() + " ] : " + mensagem.getConteudo_msm() + "\n";
                         
-                        } else {
+                      }else {
                             gere_msm = "[" + mensagem.getRecebeu() + " > Me] : " + mensagem.getConteudo_msm() + "\n";
                         }
                     } else {
-                        gere_msm = "[" + mensagem.getEnviou() + " > Me] : " + mensagem.getConteudo_msm() + "\n";
+                        gere_msm = "[" + mensagem.getEnviou() + " > Enviou-lhe uma mensagem ] : " + mensagem.getConteudo_msm() + "\n";
                     }
                     menu_utilizador.TA_Mensagem.append("\n"+gere_msm);
 
-//                    mensagens.add(new Mensagens(msg.getEnviou(), msg.getRecebeu(), msm_padeiro));
-//                    ficheiros.Guarda_Objeto_Ficheiro(mensagens, nome_ficheiro);
                     break;
 
                 case Mensagem.GRUPO_MSM:
@@ -273,6 +271,34 @@ public class Chat_cliente implements Server_to_cliente {
                 case Mensagem.ATUALAZIAR_GRUPOS:
                     atualiza_user_group( mensagem.getGrupo());
                     break;
+                    
+                case Mensagem.UTILIZADORES_REGISTADOS:
+                    Iterator<String> itr_ut = mensagem.getArray_utilizadores().iterator();
+                    while (itr_ut.hasNext()) {
+                        String ut_u = itr_ut.next();
+                        menu_utilizador.L_utilizadores.add(ut_u);
+                    }
+                    
+                    break;
+                    
+                case Mensagem.ATUALIZAR_MENSAGENS_OFFLINE:
+
+                    Iterator<Save_mensagens> itr_ut_m = mensagem.getMensagens_offline().iterator();
+                    while (itr_ut_m.hasNext()) {
+                        Save_mensagens ut_u_m = itr_ut_m.next();
+                        String gere_msm_offline = ut_u_m.getData()+" | [" + ut_u_m.getUser_enviou() + " > Me] : " + ut_u_m.getConteudo_msm()+ "\n";
+                        menu_utilizador.TA_Mensagem.append("\n"+gere_msm_offline);
+                    }
+                    break;
+                    
+                case Mensagem.MENSAGEM_GERAL:
+                    /* gere forma de mostrar mensagens */
+                    String gere_msm_geral = "";
+
+                    gere_msm_geral = "[" + mensagem.getEnviou() + " > Enviou-lhe uma mensagem ] : " + mensagem.getConteudo_msm() + "\n";
+
+                    menu_utilizador.TA_Mensagem.append("\n"+gere_msm_geral);
+                    break;
 
                 default:
                     System.out.println("Opção Inválida USER");
@@ -300,12 +326,12 @@ public class Chat_cliente implements Server_to_cliente {
         }
 
         if(groups != null){
-            Iterator<String> itr_gr = groups.iterator();
+            Iterator<Grupo> itr_gr = groups.iterator();
 
             while (itr_gr.hasNext()) {
-                String ut_g = itr_gr.next();
+                Grupo ut_g = itr_gr.next();
 
-                menu_utilizador.L_grupos.add(ut_g);
+                menu_utilizador.L_grupos.add(ut_g.getNome_grupo());
 
             }
         }

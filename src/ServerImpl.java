@@ -28,13 +28,17 @@ public class ServerImpl implements Remote, Cliente_to_server {
     protected ArrayList<Grupo> grupos;
     //contem todos os utilizadores registados
     protected ArrayList<User> user;
+    protected ArrayList<Save_mensagens> mensagens_offline;
     protected Thread thread = null;
 
     public ServerImpl() {
         this.id_cliente = 0;
         this.clientes = new ArrayList<>();
         this.grupos = new ArrayList<>();
+//        this.grupos.add(e)
         this.user = new ArrayList<>();
+        this.mensagens_offline = new ArrayList<>();
+        //user's default
         this.user.add(new User("aaaa", "aaaa", "aaaa"));
         this.user.add(new User("bbbb", "bbbb", "bbbb"));
         this.user.add(new User("cccc", "cccc", "cccc"));
@@ -103,19 +107,18 @@ public class ServerImpl implements Remote, Cliente_to_server {
                     try {
                         User cliente_user = retorna_user_dados(mensagem.getEnviou());
                         if (cliente_user != null && sc != null) {
-//                            if (sc != null) {
-//                                if (sc.getId() == mensagem.getId_comunica() && sc.getUsername_cliente().equals(mensagem.getEnviou()) && sc.getPassword_cliente().equals(mensagem.getConteudo_msm())) {
-                                sc.setNome_cliente(cliente_user.getNome_cliente());
-                                sc.setPassword_cliente(cliente_user.getPassword_cliente());
-                                sc.setUsername_cliente(cliente_user.getUsername_cliente());
-                                login = true;
-//                                }
-//                            }
+                            sc.setNome_cliente(cliente_user.getNome_cliente());
+                            sc.setPassword_cliente(cliente_user.getPassword_cliente());
+                            sc.setUsername_cliente(cliente_user.getUsername_cliente());
+                            cliente_user.setOnline(true);
+                            login = true;
                         }
                         if (sc != null) {
-                            sc.getTm().response_to_cliente(new Mensagem(Mensagem.LOGIN, sc.getId(), sc.getUsername_cliente(), sc.getNome_cliente(), login, nome_user_online(sc.getId()), new ArrayList()));
+                            //sc.getTm().response_to_cliente(new Mensagem(Mensagem.LOGIN, sc.getId(), sc.getUsername_cliente(), sc.getNome_cliente(), login, nome_user_online(sc.getId()), new ArrayList()));
+                            sc.getTm().response_to_cliente(new Mensagem(Mensagem.LOGIN, sc.getId(), sc.getUsername_cliente(), sc.getNome_cliente(), login, null, grupos));
                             if (login) {
-                                envia_novo_login_other_users(sc.getId(), sc.getNome_cliente());
+                                envia_utilizadores_registados(sc);
+//                                envia_novo_login_other_users(sc.getId(), sc.getNome_cliente());
                             }
                         }
 
@@ -132,20 +135,30 @@ public class ServerImpl implements Remote, Cliente_to_server {
                             this.user.add(new User(mensagem.getConteudo_msm(), mensagem.getEnviou(), mensagem.getAux()));
                             user_validation = true;
                         }
-
+                        if(user_validation){
+                            envia_novo_login_other_users(sc.getId(), mensagem.getConteudo_msm());
+                        }
+                        
                         sc.getTm().response_to_cliente(new Mensagem(Mensagem.REGISTO, sc.getId(), user_validation));
                     }
                     break;
                 case Mensagem.MENSAGEM_CHAT_PRIVATE:
                     
                     sc = procura_cliente_nome(mensagem.getRecebeu());
-                    System.out.println(mensagem.toString());
+                    
+                    //se o gajo estiver offline guarda mensagem, se nao, envia mensagem para destinatario
                     if(sc != null){
                         //                                     (int REGISTO, int id_cliente, String nome_quem enviou, String quem_recebe, String msm, String aux)
                         sc.getTm().response_to_cliente(new Mensagem(Mensagem.MENSAGEM_CHAT_PRIVATE, sc.getId(), sc.getNome_cliente(),mensagem.getEnviou(),mensagem.getConteudo_msm(),""));
-                        Server_Cliente me = procura_cliente_ID(mensagem.getId_comunica());
-                        me.getTm().response_to_cliente(new Mensagem(Mensagem.MENSAGEM_CHAT_PRIVATE, me.getId(), me.getNome_cliente(), sc.getNome_cliente(), mensagem.getConteudo_msm(),""));
+                    }else{
+                        guarda_mensagem_privado(mensagem);
                     }
+                    Server_Cliente me = procura_cliente_ID(mensagem.getId_comunica());
+                    if( me != null) {
+
+                        me.getTm().response_to_cliente(new Mensagem(Mensagem.MENSAGEM_CHAT_PRIVATE, me.getId(), me.getNome_cliente(), mensagem.getRecebeu()+ (sc == null ? " IS OFFLINE " : ""), mensagem.getConteudo_msm(),""));
+                    }
+                    
                     break;
                 
                 case Mensagem.GRUPO:
@@ -256,6 +269,23 @@ public class ServerImpl implements Remote, Cliente_to_server {
                                 send_file_to_all_member_group(procura_grupo, sc.getNome_cliente(), mensagem);
                             }
                         }
+                    }
+                    break;
+                
+                case Mensagem.CHANGE_USER_CHAT:
+                    sc = procura_cliente_ID(mensagem.getId_comunica()); //quem enviou mudou de utilizador
+                    if (sc != null) {
+                        procura_mensagens_do_destinatario(sc,mensagem); 
+                    }
+                    break;
+                
+                case Mensagem.MENSAGEM_GERAL:
+
+                    Server_Cliente me1 = procura_cliente_ID(mensagem.getId_comunica());
+                    
+                    if( me1 != null) {
+                        send_mensage_to_all(me1,mensagem);
+                        me1.getTm().response_to_cliente(new Mensagem(Mensagem.MENSAGEM_CHAT_PRIVATE, me1.getId(), me1.getNome_cliente(), "Geral - "+ mensagem.getRecebeu(), mensagem.getConteudo_msm(),""));
                     }
                     break;
  
@@ -559,6 +589,71 @@ public class ServerImpl implements Remote, Cliente_to_server {
 
         }
     }
-    
 
+    private void guarda_mensagem_privado(Mensagem mensagem) {
+        // array  = mensagens_offline
+        this.mensagens_offline.add(new Save_mensagens(mensagem.getEnviou(), mensagem.getRecebeu(), mensagem.getConteudo_msm()));
+    }
+
+    private void envia_utilizadores_registados(Server_Cliente sc) {
+        Iterator<User> itr_ut = this.user.iterator();
+        ArrayList<String> nome_registados = new ArrayList<>();
+        while (itr_ut.hasNext()) {
+            User ut_u = itr_ut.next();
+            if(!ut_u.getNome_cliente().equals(sc.getNome_cliente())){
+                nome_registados.add(ut_u.getNome_cliente());
+            }
+
+        }
+        try {
+            sc.getTm().response_to_cliente(new Mensagem(Mensagem.UTILIZADORES_REGISTADOS, sc.getId(), nome_registados,""));
+        } catch (RemoteException ex) {
+            Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void procura_mensagens_do_destinatario(Server_Cliente sc, Mensagem mensagem) {
+        Iterator<Save_mensagens> itr_ut = this.mensagens_offline.iterator();
+        //mensagens.gettconteudo = quem vai receber
+        ArrayList<Save_mensagens> mensagens = new ArrayList<>();
+        while (itr_ut.hasNext()) {
+            Save_mensagens ut_u = itr_ut.next();
+            if(ut_u.getUser_enviou().equals(mensagem.getConteudo_msm())){
+                mensagens.add(ut_u);
+            }
+
+        }
+        try {
+            sc.getTm().response_to_cliente(new Mensagem(Mensagem.ATUALIZAR_MENSAGENS_OFFLINE, sc.getId(), mensagens));
+        } catch (RemoteException ex) {
+            Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void send_mensage_to_all(Server_Cliente sc, Mensagem mensagem) {
+
+        for (int i = 0; i < this.clientes.size(); i++) {
+            if (this.clientes.get(i).getId() != mensagem.getId_comunica()) {
+                try {
+                    this.clientes.get(i).getTm().response_to_cliente(new Mensagem(Mensagem.MENSAGEM_GERAL, sc.getId(), sc.getNome_cliente(), mensagem.getEnviou(), mensagem.getConteudo_msm(), ""));
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        guarda_mensagem_geral(sc, mensagem);
+    }
+
+    private void guarda_mensagem_geral(Server_Cliente sc, Mensagem mensagem) {
+        Iterator<User> itr_ut = this.user.iterator();
+        while (itr_ut.hasNext()) {
+            User user = itr_ut.next();
+            if(!user.isOnline()){
+                this.mensagens_offline.add(new Save_mensagens(sc.getNome_cliente(), user.getNome_cliente(), mensagem.getConteudo_msm()));
+            }
+        }
+    }
+        
+        
 }
+

@@ -99,6 +99,7 @@ public class Utilizador_menu extends javax.swing.JFrame {
         jLabel_chefe_grupo = new javax.swing.JLabel();
         jLabel7_grupo_name = new javax.swing.JLabel();
         Anexar_ficheiro = new javax.swing.JLabel();
+        Bt_envia_mensagem1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -439,6 +440,18 @@ public class Utilizador_menu extends javax.swing.JFrame {
             }
         });
 
+        Bt_envia_mensagem1.setText("ALL");
+        Bt_envia_mensagem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Bt_envia_mensagem1ActionPerformed(evt);
+            }
+        });
+        Bt_envia_mensagem1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                Bt_envia_mensagem1KeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -447,16 +460,21 @@ public class Utilizador_menu extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(Tb_mensagem, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(Anexar_ficheiro, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
-                        .addComponent(Bt_envia_mensagem, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(Tb_mensagem, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(21, 21, 21)
+                                .addComponent(Anexar_ficheiro, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(Bt_envia_mensagem, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(Bt_envia_mensagem1)
+                                .addGap(18, 18, 18)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
@@ -470,14 +488,18 @@ public class Utilizador_menu extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(40, 40, 40)
                                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(6, 6, 6)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(Tb_mensagem, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(4, 4, 4)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(Anexar_ficheiro, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(Bt_envia_mensagem, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addGap(6, 6, 6)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(Tb_mensagem, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                                    .addComponent(Anexar_ficheiro, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(Bt_envia_mensagem, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(Bt_envia_mensagem1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addContainerGap())
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -496,30 +518,14 @@ public class Utilizador_menu extends javax.swing.JFrame {
                 Lb_sair.setVisible(false);
 
                 L_grupos.deselect(L_grupos.getSelectedIndex());
-//                JOptionPane.showMessageDialog(this, "Utilizador " + L_utilizadores.getItem(L_utilizadores.getSelectedIndex()));
                 Bt_envia_mensagem.setEnabled(true);
                 Anexar_ficheiro.setVisible(true);
 
                 TA_Mensagem.setText("");
+                
+                String target_nome = L_utilizadores.getSelectedItem();
+                cliente.getS_comunica().comunica_com_server(new Mensagem(Mensagem.CHANGE_USER_CHAT,cliente.getId_cliente(), utilizador_nome, target_nome,""));
 
-//                ArrayList<Mensagens> aaa = new File_Management().Le_Objeto_Ficheiro("mensagens.txt");
-//
-//                Iterator<Mensagens> itr = client.getClient().getMensagens().iterator();
-//
-//                while (itr.hasNext()) {
-//                    Mensagens ut = itr.next();
-//                    //(ut.getUser_recebeu().equals(utilizador_nome) && L_utilizadores.getItem(L_utilizadores.getSelectedIndex()).equals(ut.getUser_enviou())) || (ut.getUser_enviou().equals(utilizador_nome) && ut.getUser_recebeu().equals(L_utilizadores.getItem(L_utilizadores.getSelectedIndex())))
-//                    if (ut.getUser_recebeu().equals(utilizador_nome) && ut.getUser_enviou().equals(L_utilizadores.getSelectedItem())) {
-//                        //TA_mensagens.append(ut.getConteudo_msm());
-//
-//                        TA_Mensagem.append("  Me " + ut.getConteudo_msm());
-//
-//                    } else if (ut.getUser_enviou().equals(utilizador_nome) && ut.getUser_recebeu().equals(L_utilizadores.getSelectedItem())) {
-//                        //TA_mensagens.append(ut.getConteudo_msm());
-//                        TA_Mensagem.append( "  "+ut.getConteudo_msm());
-//
-//                    }
-//                }
             } catch (ArrayIndexOutOfBoundsException e) {
                 System.err.println(e);
             } catch (Exception ex) {
@@ -792,11 +798,31 @@ public class Utilizador_menu extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_L_gruposActionPerformed
 
+    private void Bt_envia_mensagem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Bt_envia_mensagem1ActionPerformed
+        // TODO add your handling code here:
+        String msg = Tb_mensagem.getText();
+
+        if (!msg.trim().isEmpty()) {
+            try {
+                Tb_mensagem.setText("");
+                //                                          (int REGISTO, int id_cliente, String nome_quem enviou, String quem_recebe, String msm, String aux)
+                cliente.getS_comunica().comunica_com_server(new Mensagem(Mensagem.MENSAGEM_GERAL, cliente.getId_cliente(), utilizador_nome, "", msg, "Mensagem"));
+            } catch (RemoteException ex) {
+                Logger.getLogger(Utilizador_menu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_Bt_envia_mensagem1ActionPerformed
+
+    private void Bt_envia_mensagem1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Bt_envia_mensagem1KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Bt_envia_mensagem1KeyPressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Anexar_ficheiro;
     private javax.swing.JButton B_novo_grupo;
     public javax.swing.JButton Bt_envia_mensagem;
+    public javax.swing.JButton Bt_envia_mensagem1;
     public java.awt.List L_grupos;
     public java.awt.List L_utilizadores;
     public java.awt.List L_utilizadores_grupo;
