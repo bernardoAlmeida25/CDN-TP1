@@ -107,11 +107,13 @@ public class ServerImpl implements Remote, Cliente_to_server {
                     try {
                         User cliente_user = retorna_user_dados(mensagem.getEnviou());
                         if (cliente_user != null && sc != null) {
-                            sc.setNome_cliente(cliente_user.getNome_cliente());
-                            sc.setPassword_cliente(cliente_user.getPassword_cliente());
-                            sc.setUsername_cliente(cliente_user.getUsername_cliente());
-                            cliente_user.setOnline(true);
-                            login = true;
+                            if(verifica_password(cliente_user, mensagem.getConteudo_msm())){
+                                sc.setNome_cliente(cliente_user.getNome_cliente());
+                                sc.setPassword_cliente(cliente_user.getPassword_cliente());
+                                sc.setUsername_cliente(cliente_user.getUsername_cliente());
+                                cliente_user.setOnline(true);
+                                login = true;
+                            }
                         }
                         if (sc != null) {
                             //sc.getTm().response_to_cliente(new Mensagem(Mensagem.LOGIN, sc.getId(), sc.getUsername_cliente(), sc.getNome_cliente(), login, nome_user_online(sc.getId()), new ArrayList()));
@@ -131,12 +133,14 @@ public class ServerImpl implements Remote, Cliente_to_server {
                     sc = procura_cliente_ID(mensagem.getId_comunica());
                     boolean user_validation = false;
                     if (sc != null) {
-                        if (verifica_existe_user_name(mensagem.getEnviou())) {
-                            this.user.add(new User(mensagem.getConteudo_msm(), mensagem.getEnviou(), mensagem.getAux()));
-                            user_validation = true;
-                        }
-                        if(user_validation){
-                            envia_novo_login_other_users(sc.getId(), mensagem.getConteudo_msm());
+                        if(verifica_registo(mensagem)){
+                            if (verifica_existe_user_name(mensagem.getEnviou())) {
+                                this.user.add(new User(mensagem.getConteudo_msm(), mensagem.getEnviou(), mensagem.getAux()));
+                                user_validation = true;
+                            }
+                            if(user_validation){
+                                envia_novo_login_other_users(sc.getId(), mensagem.getConteudo_msm());
+                            }
                         }
                         
                         sc.getTm().response_to_cliente(new Mensagem(Mensagem.REGISTO, sc.getId(), user_validation));
@@ -150,6 +154,7 @@ public class ServerImpl implements Remote, Cliente_to_server {
                     if(sc != null){
                         //                                     (int REGISTO, int id_cliente, String nome_quem enviou, String quem_recebe, String msm, String aux)
                         sc.getTm().response_to_cliente(new Mensagem(Mensagem.MENSAGEM_CHAT_PRIVATE, sc.getId(), sc.getNome_cliente(),mensagem.getEnviou(),mensagem.getConteudo_msm(),""));
+                        guarda_mensagem_privado(mensagem);
                     }else{
                         guarda_mensagem_privado(mensagem);
                     }
@@ -502,6 +507,8 @@ public class ServerImpl implements Remote, Cliente_to_server {
 
     private void remover_user_do_server(Server_Cliente user_remove) {
         try {
+            User cliente_user = retorna_user_dados(user_remove.getUsername_cliente());
+            cliente_user.setOnline(false);
             clientes.remove(user_remove);
         } catch (Exception e) {
         }
@@ -618,7 +625,7 @@ public class ServerImpl implements Remote, Cliente_to_server {
         ArrayList<Save_mensagens> mensagens = new ArrayList<>();
         while (itr_ut.hasNext()) {
             Save_mensagens ut_u = itr_ut.next();
-            if(ut_u.getUser_enviou().equals(mensagem.getConteudo_msm())){
+            if(ut_u.getUser_enviou().equals(mensagem.getConteudo_msm()) && ut_u.getUser_recebeu().equals(sc.getNome_cliente())){
                 mensagens.add(ut_u);
             }
 
@@ -652,6 +659,21 @@ public class ServerImpl implements Remote, Cliente_to_server {
                 this.mensagens_offline.add(new Save_mensagens(sc.getNome_cliente(), user.getNome_cliente(), mensagem.getConteudo_msm()));
             }
         }
+    }
+
+    private boolean verifica_registo(Mensagem mensagem) {
+        boolean bool = false;
+        if(mensagem.getEnviou().trim().length() > 3 && mensagem.getConteudo_msm().trim().length() > 3 && mensagem.getAux().trim().length() > 3){
+            bool = true;
+        }
+        return bool;
+    }
+
+    private boolean verifica_password(User cliente_user, String conteudo_msm) {
+        if(cliente_user.isOnline()){
+            return false;
+        }
+        return cliente_user.getPassword_cliente().equals(conteudo_msm);
     }
         
         

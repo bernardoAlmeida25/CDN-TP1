@@ -28,6 +28,7 @@ public class Registar extends javax.swing.JFrame {
 
     public Registar() {
         initComponents();
+        Lb_error.setVisible(false);
     }
 
     /**
@@ -52,6 +53,7 @@ public class Registar extends javax.swing.JFrame {
         name_registo = new javax.swing.JTextField();
         repete_password = new javax.swing.JPasswordField();
         password_registo = new javax.swing.JPasswordField();
+        Lb_error = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -135,6 +137,20 @@ public class Registar extends javax.swing.JFrame {
 
         password_registo.setBackground(new java.awt.Color(108, 122, 137));
 
+        Lb_error.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/error.png"))); // NOI18N
+        Lb_error.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Lb_error.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Lb_errorMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                Lb_errorMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                Lb_errorMouseExited(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -148,13 +164,16 @@ public class Registar extends javax.swing.JFrame {
                             .addComponent(username2)
                             .addComponent(password)
                             .addComponent(username))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(name_registo, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(repete_password, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(username_registo, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(password_registo, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)))
+                                .addComponent(password_registo, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(11, 11, 11)
+                                .addComponent(Lb_error)))
                         .addGap(19, 19, 19))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -166,7 +185,9 @@ public class Registar extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(70, 70, 70)
+                .addContainerGap()
+                .addComponent(Lb_error, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(username1)
                     .addComponent(name_registo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -223,7 +244,6 @@ public class Registar extends javax.swing.JFrame {
         if(password_var.trim().equals(repetir_password_var.trim())){
             try {
                 this.all.getS_comunica().comunica_com_server(new Mensagem(Mensagem.REGISTO, this.all.getId_cliente(), username_var, nome_var, repetir_password_var));
-
             } catch (RemoteException ex) {
                 Logger.getLogger(Registar.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -239,6 +259,7 @@ public class Registar extends javax.swing.JFrame {
     private void jButton_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_cancelActionPerformed
 
         this.all.getNovo_registo().dispose();
+        this.all.getMenu_inicial().Lb_error_login.setVisible(false);
         this.all.getMenu_inicial().setVisible(true);
         this.all.getMenu_inicial().pack();
         this.all.getMenu_inicial().setLocationRelativeTo(null);
@@ -254,8 +275,39 @@ public class Registar extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_name_registoActionPerformed
 
+    private void Lb_errorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Lb_errorMouseClicked
+
+//        String target_nome_grupo = "";
+//        try {
+//            target_nome_grupo = L_grupos.getSelectedItem();
+//        } catch (ArrayIndexOutOfBoundsException ex) {
+//            System.out.println(ex);
+//            target_nome_grupo = "";
+//        }
+//
+//        if (!target_nome_grupo.trim().isEmpty()) {
+//
+//            Tb_mensagem.setText("");
+//            try {
+//                cliente.getS_comunica().comunica_com_server(new Mensagem(Mensagem.SAIR_GRUPO, cliente.getId_cliente(), target_nome_grupo, "Remover", "Sair Grupo"));
+//            } catch (RemoteException ex) {
+//                Logger.getLogger(Utilizador_menu.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//
+//        }
+    }//GEN-LAST:event_Lb_errorMouseClicked
+
+    private void Lb_errorMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Lb_errorMouseEntered
+//        lb_sair.setVisible(true);
+    }//GEN-LAST:event_Lb_errorMouseEntered
+
+    private void Lb_errorMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Lb_errorMouseExited
+//        lb_sair.setVisible(false);
+    }//GEN-LAST:event_Lb_errorMouseExited
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JLabel Lb_error;
     private javax.swing.JButton jButton_Registar;
     private javax.swing.JButton jButton_cancel;
     private javax.swing.JLabel jLabel1;

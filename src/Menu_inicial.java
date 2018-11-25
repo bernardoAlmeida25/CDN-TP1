@@ -18,6 +18,7 @@ public class Menu_inicial extends javax.swing.JFrame {
 
     public Menu_inicial() {
         initComponents();
+        Lb_error_login.setVisible(false);
     }
     public Menu_inicial(Chat_cliente c) {
         this.c_cliente = c;
@@ -46,6 +47,7 @@ public class Menu_inicial extends javax.swing.JFrame {
         username1 = new javax.swing.JLabel();
         Efetuar_login = new javax.swing.JButton();
         password_login = new javax.swing.JPasswordField();
+        Lb_error_login = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -186,6 +188,20 @@ public class Menu_inicial extends javax.swing.JFrame {
             }
         });
 
+        Lb_error_login.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/error.png"))); // NOI18N
+        Lb_error_login.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Lb_error_login.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Lb_error_loginMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                Lb_error_loginMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                Lb_error_loginMouseExited(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -207,7 +223,9 @@ public class Menu_inicial extends javax.swing.JFrame {
                             .addComponent(Efetuar_login)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(140, 140, 140)
-                        .addComponent(jLabel2)))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(Lb_error_login)
+                            .addComponent(jLabel2))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -215,19 +233,21 @@ public class Menu_inicial extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(38, 38, 38)
                 .addComponent(jLabel2)
-                .addGap(50, 50, 50)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Lb_error_login, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addComponent(username)
                 .addGap(18, 18, 18)
                 .addComponent(username_login, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(username1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(password_login, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(Efetuar_login)
-                .addGap(48, 48, 48)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel_registo)
-                .addGap(22, 22, 22))
+                .addGap(35, 35, 35))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -342,10 +362,41 @@ public class Menu_inicial extends javax.swing.JFrame {
 
     }//GEN-LAST:event_Efetuar_loginKeyPressed
 
+    private void Lb_error_loginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Lb_error_loginMouseClicked
+
+        //        String target_nome_grupo = "";
+        //        try {
+            //            target_nome_grupo = L_grupos.getSelectedItem();
+            //        } catch (ArrayIndexOutOfBoundsException ex) {
+            //            System.out.println(ex);
+            //            target_nome_grupo = "";
+            //        }
+        //
+        //        if (!target_nome_grupo.trim().isEmpty()) {
+            //
+            //            Tb_mensagem.setText("");
+            //            try {
+                //                cliente.getS_comunica().comunica_com_server(new Mensagem(Mensagem.SAIR_GRUPO, cliente.getId_cliente(), target_nome_grupo, "Remover", "Sair Grupo"));
+                //            } catch (RemoteException ex) {
+                //                Logger.getLogger(Utilizador_menu.class.getName()).log(Level.SEVERE, null, ex);
+                //            }
+            //
+            //        }
+    }//GEN-LAST:event_Lb_error_loginMouseClicked
+
+    private void Lb_error_loginMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Lb_error_loginMouseEntered
+        //        lb_sair.setVisible(true);
+    }//GEN-LAST:event_Lb_error_loginMouseEntered
+
+    private void Lb_error_loginMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Lb_error_loginMouseExited
+        //        lb_sair.setVisible(false);
+    }//GEN-LAST:event_Lb_error_loginMouseExited
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Efetuar_login;
     private javax.swing.JLabel Lb_Estado;
+    public javax.swing.JLabel Lb_error_login;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel_close_window;

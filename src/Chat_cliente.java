@@ -119,14 +119,10 @@ public class Chat_cliente implements Server_to_cliente {
                         this.menu_utilizador.setLocationRelativeTo(null);
                         this.menu_utilizador.chat_menu(this, nome_cliente);
                         atualiza_chat_menu(mensagem.getArray_utilizadores(), mensagem.getGrupos_criados());
-//            this.menu_inicial.dispose();
                     } else {
 
                         System.err.println("Login incorreto");
-//            JOptionPane.showMessageDialog(this.menu_inicial,
-//                    "Username ou palavra passe estao incorretos",
-//                    "Erro de Login",
-//                    JOptionPane.ERROR_MESSAGE);
+                        this.menu_inicial.Lb_error_login.setVisible(true);
                     }
                     break;
 
@@ -134,17 +130,14 @@ public class Chat_cliente implements Server_to_cliente {
                     if (mensagem.isBool()) {
                         System.err.println("Registo com Sucesso!!");
                         this.id_cliente = mensagem.getId_comunica();
-
                         this.novo_registo.setVisible(false);
-
                         this.menu_inicial.setVisible(true);
                         this.menu_inicial.pack();
                         this.menu_inicial.setLocationRelativeTo(null);
 
                     } else {
-
                         System.err.println("Registo falhou!");
-//            JOptionPane.showMessageDialog(novo_registo, "Nome do grupo vazio");
+                        this.novo_registo.Lb_error.setVisible(true);
                     }
                     break;
 
@@ -180,16 +173,17 @@ public class Chat_cliente implements Server_to_cliente {
                     String gere_msm = "";
 
                     if (menu_utilizador.L_utilizadores.getSelectedIndex() != -1) {
-                        if (menu_utilizador.L_utilizadores.getItem(menu_utilizador.L_utilizadores.getSelectedIndex()).equals(mensagem.getRecebeu())) {
+                        if (menu_utilizador.L_utilizadores.getItem(menu_utilizador.L_utilizadores.getSelectedIndex()).equals(mensagem.getRecebeu()) ) {
                             gere_msm = "[" + mensagem.getRecebeu() + " > Me] : " + mensagem.getConteudo_msm() + "\n";
-                        
-                        } else if (mensagem.getEnviou().equals(nome_cliente)) {
-                            gere_msm = "[" + mensagem.getEnviou()+ " >" +  mensagem.getRecebeu() + " ] : " + mensagem.getConteudo_msm() + "\n";
-                        
-                      }else {
-                            gere_msm = "[" + mensagem.getRecebeu() + " > Me] : " + mensagem.getConteudo_msm() + "\n";
-                        }
-                    } else {
+
+                        } else if (  mensagem.getEnviou().equals(nome_cliente)) {
+                            gere_msm = "[" + mensagem.getEnviou() + " >" +  mensagem.getRecebeu() + " ] : " + mensagem.getConteudo_msm() + "\n";
+
+                        } 
+//                        else {
+//                            gere_msm = "[" + mensagem.getEnviou() + " > aMe] : " + mensagem.getConteudo_msm() + "\n";
+//                        }
+                    } else if (mensagem.getRecebeu().equals("GERAL")) {
                         gere_msm = "[" + mensagem.getEnviou() + " > Enviou-lhe uma mensagem ] : " + mensagem.getConteudo_msm() + "\n";
                     }
                     menu_utilizador.TA_Mensagem.append("\n"+gere_msm);
